@@ -57,6 +57,10 @@ pub fn run() !void {
             staged = true;
         } else if (std.mem.eql(u8, arg, "--stat") and std.mem.eql(u8, cmd, "show")) {
             stat = true;
+        } else if ((std.mem.eql(u8, cmd, "branch") or std.mem.eql(u8, cmd, "b")) and !std.mem.eql(u8, arg, "-H") and !std.mem.eql(u8, arg, "--human")) {
+            // Native branch only lists local branches. Creation/deletion/rename and
+            // branch selection arguments must pass through to git.
+            has_unknown_flags = true;
         } else if (std.mem.eql(u8, arg, "-n")) {
             // Handled below with value parsing
         } else if (arg.len > 0 and arg[0] == '-') {

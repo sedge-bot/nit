@@ -238,6 +238,19 @@ check "branch passthrough" \
   "git branch" \
   "$NIT branch"
 
+branch_create_out=$("$NIT" branch topic-from-old HEAD~1 2>&1) || true
+if [ -z "$branch_create_out" ] && [ "$(git rev-parse topic-from-old)" = "$(git rev-parse HEAD~1)" ]; then
+  PASS=$((PASS + 1))
+  echo "  PASS: branch create passthrough with start point"
+else
+  FAIL=$((FAIL + 1))
+  echo "  FAIL: branch create passthrough with start point"
+  ERRORS="${ERRORS}\n--- FAIL: branch create passthrough with start point ---\n"
+  ERRORS="${ERRORS}nit cmd: $NIT branch topic-from-old HEAD~1\n"
+  ERRORS="${ERRORS}expected: empty output and topic-from-old at HEAD~1\n"
+  ERRORS="${ERRORS}nit output:\n$branch_create_out\n"
+fi
+
 check "log --graph passthrough" \
   "git log --graph --oneline -3" \
   "$NIT log --graph --oneline -3"
