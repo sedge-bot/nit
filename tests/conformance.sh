@@ -1123,4 +1123,3 @@ if [ $FAIL -gt 0 ]; then
   printf "$ERRORS"
   exit 1
 fi
-
